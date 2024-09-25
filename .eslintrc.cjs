@@ -1,6 +1,10 @@
 module.exports = {
   root: true,
-  env: { browser: true, es2020: true },
+  env: { 
+    browser: true, 
+    es2020: true, 
+    node: true,  // Node.js 환경도 추가 
+    },
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
