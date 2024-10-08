@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import axios from 'axios'
+import PokeCard from './components/PokeCard';
 
 function App() {
   const [pokemons, setpokemons] = useState([]);
-  const url = 'https://pokeapi.co/api/v2/pokemon/?limit=1008&offset=0'
+  const url = 'https://pokeapi.co/api/v2/pokemon/?limit=10&offset=0'
 
   useEffect(() => {
     fetchPokeData();
@@ -32,9 +33,7 @@ function App() {
           {pokemons.length > 0 ? 
             (
               pokemons.map(({ url, name }, index) => (
-                <div key={index}>
-                  {name}
-                </div>
+                <PokeCard key={url} url={url} name={name}/>
               ))
             ) : (
               <h2 className="font-medium text-lg text-slate-900 mb-1">
