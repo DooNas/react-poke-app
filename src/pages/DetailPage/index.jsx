@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import axios from 'axios';
+import { Loading } from '../../assets/Loading';
+import { LessThan } from '../../assets/LessThan';
+import GreaterThan from '../../assets/GreaterThan';
 
 const DetailPage = () => {
 
@@ -46,15 +49,17 @@ const DetailPage = () => {
           next: nextAndPreviousPokemon.next,
           abilities: formatPokemonAbilities(abilities),
           stats: formatPokemonStats(stats),
-          DamageRelations
+          DamageRelations,
+          types: types.map(type => type.type.name)
         }
         setPokemon(formattedPokemonData);
         setIsLoading(false);
         console.log('formattedPokemonData', formattedPokemonData)
-
+        
       }
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
     }
   }
 
@@ -99,10 +104,55 @@ const DetailPage = () => {
     }
   }
 
-  if(isLoading) return <div>...loading</div>
+  if(isLoading) {
+    return (
+      <div className={
+          `absolute h-auto w-auto top-1/3 -translate-x-1/2 left-1/2 z-50`
+      }>
+        <Loading className='w-12 h-12 z-50 animate-spin text-slate-900' />
+
+      </div>
+    )
+  }
+
+  if(!isLoading && !pokemon) {
+    return (
+      <div>...NOT FOUND</div>
+    )
+  }
+
+  const img = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork//${pokemon?.id}.png`;
+  const bg = `bg-${pokemon?.type?.[0]}`;
+  const text = `text-${pokemon?.types?.[0]}`;
+  console.log(pokemon, bg, text);
 
   return (
-    <div>DetailPage</div>
+    <article className='flex items-center gap-1 flex0col w-full'>
+      <div
+        className={
+          `${bg} w-auto h-full flex flex-col z-0 items-center justify-end relative overflow-hidden`
+        }
+      >
+        {pokemon.previous && (
+          <Link 
+            className='absolute top-[40%] -translate-y-1/2 z-50 left-1'
+            to={`/pokemon/${pokemon.previous}`}
+          >
+            <LessThan className='w-6 h-8 p-1'/>
+          </Link>
+        )}
+
+        asdfasdf
+        {pokemon.next && (
+          <Link 
+            className='absolute top-[40%] -translate-y-1/2 z-50 right-1'
+            to={`/pokemon/${pokemon.next}`}
+          >
+            <GreaterThan className='w-6 h-8 p-1'/>
+          </Link>
+        )}
+      </div>
+    </article>
   )
 }
 
