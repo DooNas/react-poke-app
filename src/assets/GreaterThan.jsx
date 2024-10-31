@@ -1,27 +1,22 @@
-export const GreaterThan = ({ className: CN= '' }) => (
-  <svg
-    viewBox="0 0 8 16"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className={CN}
-  >
-    <g clipPath="url(#clip0_346_14991)">
-      <path
-        d="M0.772 1.19067L0.153291 1.80938C0.00685304 1.95582 0.00685304 2.19326 0.153291 2.3397L5.80791 7.99435L0.153291 13.649C0.00685304 13.7955 0.00685304 14.0329 0.153291 14.1793L0.772 14.7981C0.918438 14.9445 1.15588 14.9445 1.30232 14.7981L7.84676 8.25362C7.9932 8.10718 7.9932 7.86974 7.84676 7.7233L1.30232 1.17891C1.15588 1.03247 0.918438 1.03247 0.772 1.19067Z"
-        fill="currentColor"
-      />
-    </g>
-    <defs>
-      <clipPath id="clip0_346_14991">
-        <rect
-          width="8"
-          height="16"
-          fill="white"
-          transform="translate(0 0)"
-        />
-      </clipPath>
-    </defs>
-  </svg>
-);
 
-export default GreaterThan;
+
+export const GreaterThan = ({ className: CN = '' }) => (
+   <svg
+      viewBox="0 0 8 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={CN}
+   >
+      <g clipPath="url(#clip0_346_14988)">
+         <path
+            d="M0.772004 1.19066L0.153285 1.80935C0.00684766 1.95579 0.00684766 2.19322 0.153285 2.33969L5.80013 8.00001L0.153285 13.6603C0.00684766 13.8068 0.00684766 14.0442 0.153285 14.1907L0.772004 14.8094C0.918441 14.9558 1.15588 14.9558 1.30235 14.8094L7.84653 8.26519C7.99297 8.11875 7.99297 7.88132 7.84653 7.73485L1.30235 1.19066C1.15588 1.04419 0.918441 1.04419 0.772004 1.19066Z"
+            fill="white"
+         />
+      </g>
+      <defs>
+         <clipPath id="clip0_346_14988">
+            <rect width="8" height="16" fill="white" />
+         </clipPath>
+      </defs>
+   </svg>
+)
