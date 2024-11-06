@@ -10,6 +10,7 @@ import { Balance } from '../../assets/Balance';
 import { Vector } from '../../assets/Vector';
 import { Type } from '../../components/Type';
 import BaseStat from '../../components/BaseStat';
+import DamageRelations from '../../components/DamageRelations';
 
 const DetailPage = () => {
 
@@ -19,7 +20,6 @@ const DetailPage = () => {
   const params = useParams();
   const pokemonId = params.id;
   const baseUrl = `http://pokeapi.co/api/v2/pokemon/`;
-  console.log(params.id);
 
   useEffect(() => {
     fetchPokemonData();
@@ -34,13 +34,11 @@ const DetailPage = () => {
       if (pokemonData) {
         const { name, id, types, weight, height, stats, abilities } = pokemonData;
         const nextAndPreviousPokemon = await getNextAndPreviousPokemon(id);
-        console.log('stats', stats);
+
 
         const DamageRelations = await Promise.all(
           types.map(async (i) => {
-            console.log('i', i)
             const type = await axios.get(i.type.url);
-            console.log('type', type);
             return type.data.damage_relations
           })
         )
@@ -59,7 +57,6 @@ const DetailPage = () => {
         }
         setPokemon(formattedPokemonData);
         setIsLoading(false);
-        console.log('formattedPokemonData', formattedPokemonData)
         
       }
     } catch (error) {
@@ -94,14 +91,11 @@ const DetailPage = () => {
     const urlPokemon = `${baseUrl}?limit=1&offset=${id - 1}`;
     // prev 와 nest pokemon의 정보를 알 수 있는 url을 가지기 위해 요청을 보냄
     const { data: pokemonData } = await axios.get(urlPokemon);
-    console.log( "****",pokemonData )
     // pokemonData에 pokemon url이 담김.
 
     const nextResponse = pokemonData.next && (await axios.get(pokemonData.next));
     
     const previousResponse = pokemonData.previous && (await axios.get(pokemonData.previous));
-
-    console.log('previousResponse', previousResponse);
 
     return {
       next: nextResponse?.data?.results?.[0].name,
@@ -129,7 +123,6 @@ const DetailPage = () => {
   const img = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork//${pokemon?.id}.png`;
   const bg = `bg-${pokemon?.types?.[0]}`; 
   const text = `text-${pokemon?.types?.[0]}`;
-  console.log(pokemon, bg, text);
 
   return (
     <article className="flex items-center gap-1 flex-col w-full">
@@ -241,9 +234,10 @@ const DetailPage = () => {
             {pokemon.DamageRelations && (
               <div className='w-10/12'>
                 <h2 className={`text-base text-center font-semibold ${text}`}>
-                  데미지 관계
+                  <DamageRelations
+                    damages={pokemon.DamageRelations}
+                  />
                 </h2>
-                데이미들
               </div>
             )}
 
