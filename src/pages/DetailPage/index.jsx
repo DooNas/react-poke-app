@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Link, useParams } from 'react-router-dom'
-import axios from 'axios';
+import axios  from 'axios';
 import { Loading } from '../../assets/Loading';
 import { LessThan } from '../../assets/LessThan';
 import { GreaterThan } from '../../assets/GreaterThan';
@@ -58,8 +58,10 @@ const DetailPage = () => {
           stats: formatPokemonStats(stats),
           DamageRelations,
           types: types.map(type => type.type.name),
-          sprites: formatPokemonSprites(sprites)
+          sprites: formatPokemonSprites(sprites),
+          description: await getPokemonDescription(id) // 내부 비동기 작업이 모두 끝날때까지 대기
         }
+
         setPokemon(formattedPokemonData);
         setIsLoading(false);
         
@@ -68,6 +70,24 @@ const DetailPage = () => {
       console.log(error);
       setIsLoading(false);
     }
+  }
+
+  const filterAndFormatDescription = (flavorText) => {
+    const koreanDescriptions = flavorText
+      ?.filter((text) => text.language.name === "ko")
+      .map((text) => text.flavor_text.replace(/\r|\n|\f/g, ' '))
+    
+    return koreanDescriptions;
+  }
+
+  const getPokemonDescription = async (id) => {
+    const url = `https://pokeapi.co/api/v2/pokemon-species/${id}/`
+
+    const { data : pokemonSpecies } = await axios.get(url);
+
+    const description = filterAndFormatDescription(pokemonSpecies.flavor_text_entries);
+
+    return description[Math.floor(Math.random() * description.length)]
   }
 
   const formatPokemonSprites = (sprites) => {
@@ -79,7 +99,6 @@ const DetailPage = () => {
         delete newSprites[key];
       }
     });
-    console.log(newSprites);
     return Object.values(newSprites);
   }
 
@@ -249,6 +268,13 @@ const DetailPage = () => {
                   </tbody>
                 </table>
             </div>
+
+            <h2 className={`text-base font-semibold ${text}`}>
+              설명
+            </h2>
+            <p className='text-md leading-4 font-sans text-zinc-200 max-w-[30rem] text-center'>
+              {pokemon.description}
+            </p>
 
             <div className='flex my-8 flex-wrap justify-center'>
                     {pokemon.sprites.map((url, index) => (
