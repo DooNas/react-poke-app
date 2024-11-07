@@ -16,7 +16,7 @@ import DamageModel from '../../components/DamageModel';
 const DetailPage = () => {
 
   const [pokemon, setPokemon] = useState();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -25,12 +25,13 @@ const DetailPage = () => {
   const baseUrl = `http://pokeapi.co/api/v2/pokemon/`;
 
   useEffect(() => {
-    fetchPokemonData();
-  }, [])
+    setIsLoading(true);
+    fetchPokemonData(pokemonId);
+  }, [pokemonId])
   
 
-  async function fetchPokemonData() {
-    const url = `${baseUrl}${pokemonId}`
+  async function fetchPokemonData(id) {
+    const url = `${baseUrl}${id}`
     try{
       const { data: pokemonData } = await axios.get(url);
 
