@@ -14,7 +14,9 @@ const NavBar = () => {
 
   const [show, setShow] = useState(false);
 
-  const [userData, setUserData] = useState({});
+  const initialUserData = localStorage.getItem('userData') ? 
+    JSON.parse(localStorage.getItem('userData')) : {};
+  const [userData, setUserData] = useState(initialUserData);
 
   const { pathname } = useLocation();
 
@@ -58,6 +60,8 @@ const NavBar = () => {
     signInWithPopup(auth, provider)
     .then(result => {
       setUserData(result.user);
+      //로그인 데이터 보관
+      localStorage.setItem("userData", JSON.stringify(result.user));
     })
     .catch(error => {
       console.log(error)
