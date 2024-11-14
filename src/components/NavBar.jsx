@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components'
 
 // Firebase를 활용해서 구글로그인 구현.
-import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from 'firebase/auth';
 import app from '../../firebase';
 
 
@@ -15,6 +15,34 @@ const NavBar = () => {
   const [show, setShow] = useState(false);
 
   const { pathname } = useLocation();
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      // // Q. UI를 통해 접근하는 경우 멀쩡하지만, URL을 통해 접근하는 경우 원복되는 이유는?
+      // if(user) {
+      //   navigate("/");
+      // } else {
+      //   navigate("/login");
+      // }
+      // // Thinking : dom의 기준이 자식 컴포넌트를 타고 가면 문제 없는데 url로 탈 경우 처음부터라서?
+      //// /* A.
+      //   비슷하지만 세부적으로는 url을 통해 호출할 경우 Page 전체가 리플레쉬되면서 onAuthStateChanged가 호출되며 다시 원복된다.
+      //   하지만 UI의 컴포넌트를 통해 호출될 경우 일부만 리플레쉬 되면서 onAuthStateChanged가 호출되지 않아 원복되지 않고 접근되는 것이다.
+      // */
+      // 로그인 유무 체크
+      if(!user) {
+        navigate("/login");
+      } else if(user && pathname === "/login") {
+        navigate("/");
+      }
+    })
+    return () => {
+      unsubscribe();
+    }
+  }, [pathname])
+  
 
   
   const handleAuth = () => {
